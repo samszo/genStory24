@@ -1,0 +1,906 @@
+{
+  "1": {
+    "inputs": {
+      "ckpt_name": "starlightXLAnimated_v3.safetensors",
+      "vae_name": "Baked VAE",
+      "clip_skip": -2,
+      "lora_name": "lcm.safetensors",
+      "lora_model_strength": 1,
+      "lora_clip_strength": 1,
+      "positive": [
+        "6",
+        0
+      ],
+      "negative": [
+        "6",
+        1
+      ],
+      "token_normalization": "none",
+      "weight_interpretation": "comfy",
+      "empty_latent_width": 1024,
+      "empty_latent_height": 1024,
+      "batch_size": 1
+    },
+    "class_type": "Efficient Loader",
+    "_meta": {
+      "title": "Efficient Loader"
+    }
+  },
+  "2": {
+    "inputs": {
+      "seed": 851590489004658,
+      "steps": 8,
+      "cfg": 2,
+      "sampler_name": "lcm",
+      "scheduler": "karras",
+      "denoise": 1,
+      "preview_method": "auto",
+      "vae_decode": "true",
+      "model": [
+        "1",
+        0
+      ],
+      "positive": [
+        "1",
+        1
+      ],
+      "negative": [
+        "1",
+        2
+      ],
+      "latent_image": [
+        "1",
+        3
+      ],
+      "optional_vae": [
+        "1",
+        4
+      ]
+    },
+    "class_type": "KSampler (Efficient)",
+    "_meta": {
+      "title": "KSampler (Efficient)"
+    }
+  },
+  "6": {
+    "inputs": {
+      "text_positive": "cartoon of 20 year old woman (brown short crop hair, wire glasses), looking at us, shrugging shoulders, suburban backyard background",
+      "text_negative": "bad anatomy",
+      "milehigh": "Disney Animation_Animation",
+      "log_prompt": false
+    },
+    "class_type": "MilehighStyler",
+    "_meta": {
+      "title": "Milehigh Styler"
+    }
+  },
+  "23": {
+    "inputs": {
+      "ckpt_name": "starlightXLAnimated_v3.safetensors",
+      "vae_name": "Baked VAE",
+      "clip_skip": -2,
+      "lora_name": "lcm.safetensors",
+      "lora_model_strength": 1,
+      "lora_clip_strength": 1,
+      "positive": [
+        "25",
+        0
+      ],
+      "negative": [
+        "25",
+        1
+      ],
+      "token_normalization": "none",
+      "weight_interpretation": "comfy",
+      "empty_latent_width": 1024,
+      "empty_latent_height": 1024,
+      "batch_size": 1
+    },
+    "class_type": "Efficient Loader",
+    "_meta": {
+      "title": "Efficient Loader"
+    }
+  },
+  "24": {
+    "inputs": {
+      "seed": 1078544644003685,
+      "steps": 8,
+      "cfg": 2,
+      "sampler_name": "lcm",
+      "scheduler": "karras",
+      "denoise": 1,
+      "preview_method": "auto",
+      "vae_decode": "true",
+      "model": [
+        "23",
+        0
+      ],
+      "positive": [
+        "23",
+        1
+      ],
+      "negative": [
+        "23",
+        2
+      ],
+      "latent_image": [
+        "23",
+        3
+      ],
+      "optional_vae": [
+        "23",
+        4
+      ]
+    },
+    "class_type": "KSampler (Efficient)",
+    "_meta": {
+      "title": "KSampler (Efficient)"
+    }
+  },
+  "25": {
+    "inputs": {
+      "text_positive": "cartoon of 20 year old woman (brown short crop hair, wire glasses), using both hands to push upright lawn mower, suburban backyard, wide screen shot",
+      "text_negative": "",
+      "milehigh": "Disney Animation_Animation",
+      "log_prompt": false
+    },
+    "class_type": "MilehighStyler",
+    "_meta": {
+      "title": "Milehigh Styler"
+    }
+  },
+  "27": {
+    "inputs": {
+      "image": "$27-0",
+      "images": [
+        "45",
+        0
+      ]
+    },
+    "class_type": "PreviewBridge",
+    "_meta": {
+      "title": "Preview Bridge (Image)"
+    }
+  },
+  "28": {
+    "inputs": {
+      "preset": "custom",
+      "text_top": "",
+      "text_bottom": "You know, it's not easy\nliving in the suburbs",
+      "font_name": "Roboto-Regular.ttf",
+      "max_font_size": 150,
+      "font_color": "black",
+      "font_outline": "none",
+      "bar_color": "white",
+      "bar_options": "bottom",
+      "font_color_hex": "#000000",
+      "bar_color_hex": "#000000",
+      "image": [
+        "2",
+        5
+      ]
+    },
+    "class_type": "CR Simple Meme Template",
+    "_meta": {
+      "title": "📱 CR Simple Meme Template"
+    }
+  },
+  "29": {
+    "inputs": {
+      "preset": "custom",
+      "text_top": "",
+      "text_bottom": "I have to care for my family,\nour pets, our lawn and more",
+      "font_name": "Roboto-Regular.ttf",
+      "max_font_size": 150,
+      "font_color": "black",
+      "font_outline": "none",
+      "bar_color": "white",
+      "bar_options": "bottom",
+      "font_color_hex": "#000000",
+      "bar_color_hex": "#000000",
+      "image": [
+        "24",
+        5
+      ]
+    },
+    "class_type": "CR Simple Meme Template",
+    "_meta": {
+      "title": "📱 CR Simple Meme Template"
+    }
+  },
+  "30": {
+    "inputs": {
+      "ckpt_name": "starlightXLAnimated_v3.safetensors",
+      "vae_name": "Baked VAE",
+      "clip_skip": -2,
+      "lora_name": "lcm.safetensors",
+      "lora_model_strength": 1,
+      "lora_clip_strength": 1,
+      "positive": [
+        "32",
+        0
+      ],
+      "negative": [
+        "32",
+        1
+      ],
+      "token_normalization": "none",
+      "weight_interpretation": "comfy",
+      "empty_latent_width": 1024,
+      "empty_latent_height": 1024,
+      "batch_size": 1
+    },
+    "class_type": "Efficient Loader",
+    "_meta": {
+      "title": "Efficient Loader"
+    }
+  },
+  "31": {
+    "inputs": {
+      "seed": 49142047746649,
+      "steps": 8,
+      "cfg": 2,
+      "sampler_name": "lcm",
+      "scheduler": "karras",
+      "denoise": 1,
+      "preview_method": "auto",
+      "vae_decode": "true",
+      "model": [
+        "30",
+        0
+      ],
+      "positive": [
+        "30",
+        1
+      ],
+      "negative": [
+        "30",
+        2
+      ],
+      "latent_image": [
+        "30",
+        3
+      ],
+      "optional_vae": [
+        "30",
+        4
+      ]
+    },
+    "class_type": "KSampler (Efficient)",
+    "_meta": {
+      "title": "KSampler (Efficient)"
+    }
+  },
+  "32": {
+    "inputs": {
+      "text_positive": "cartoon of steamy bathroom (foggy glass, frosted glass:1.3) sheet covering around 20 year old woman (brown short crop hair, wire glasses), looking at mirror",
+      "text_negative": "body curves, details, nsfw, nipples",
+      "milehigh": "Disney Animation_Animation",
+      "log_prompt": false
+    },
+    "class_type": "MilehighStyler",
+    "_meta": {
+      "title": "Milehigh Styler"
+    }
+  },
+  "33": {
+    "inputs": {
+      "preset": "custom",
+      "text_top": "",
+      "text_bottom": "Not to mention having to look\nperfect every...single...day",
+      "font_name": "Roboto-Regular.ttf",
+      "max_font_size": 150,
+      "font_color": "black",
+      "font_outline": "none",
+      "bar_color": "white",
+      "bar_options": "bottom",
+      "font_color_hex": "#000000",
+      "bar_color_hex": "#000000",
+      "image": [
+        "31",
+        5
+      ]
+    },
+    "class_type": "CR Simple Meme Template",
+    "_meta": {
+      "title": "📱 CR Simple Meme Template"
+    }
+  },
+  "34": {
+    "inputs": {
+      "layout_options": "header and footer",
+      "header_height": 200,
+      "header_text": "Day in the Life",
+      "header_align": "left",
+      "footer_height": 100,
+      "footer_text": "By: Grockster",
+      "footer_align": "right",
+      "font_name": "Quicksand-Bold.ttf",
+      "font_color": "black",
+      "header_font_size": 150,
+      "footer_font_size": 60,
+      "border_thickness": 10,
+      "border_color": "black",
+      "background_color": "white",
+      "font_color_hex": "#000000",
+      "border_color_hex": "#000000",
+      "bg_color_hex": "#000000",
+      "image_panel": [
+        "68",
+        0
+      ]
+    },
+    "class_type": "CR Page Layout",
+    "_meta": {
+      "title": "🌁 CR Page Layout"
+    }
+  },
+  "45": {
+    "inputs": {
+      "top_thickness": 20,
+      "bottom_thickness": 20,
+      "left_thickness": 20,
+      "right_thickness": 20,
+      "border_color": "custom",
+      "outline_thickness": 100,
+      "outline_color": "navy",
+      "border_color_hex": "#004E9C",
+      "image": [
+        "34",
+        0
+      ]
+    },
+    "class_type": "CR Image Border",
+    "_meta": {
+      "title": "🌁 CR Image Border"
+    }
+  },
+  "46": {
+    "inputs": {
+      "ckpt_name": "starlightXLAnimated_v3.safetensors",
+      "vae_name": "Baked VAE",
+      "clip_skip": -2,
+      "lora_name": "lcm.safetensors",
+      "lora_model_strength": 1,
+      "lora_clip_strength": 1,
+      "positive": [
+        "48",
+        0
+      ],
+      "negative": [
+        "48",
+        1
+      ],
+      "token_normalization": "none",
+      "weight_interpretation": "comfy",
+      "empty_latent_width": 1024,
+      "empty_latent_height": 1024,
+      "batch_size": 1
+    },
+    "class_type": "Efficient Loader",
+    "_meta": {
+      "title": "Efficient Loader"
+    }
+  },
+  "47": {
+    "inputs": {
+      "seed": 49142047746654,
+      "steps": 12,
+      "cfg": 2,
+      "sampler_name": "lcm",
+      "scheduler": "karras",
+      "denoise": 1,
+      "preview_method": "auto",
+      "vae_decode": "true",
+      "model": [
+        "46",
+        0
+      ],
+      "positive": [
+        "46",
+        1
+      ],
+      "negative": [
+        "46",
+        2
+      ],
+      "latent_image": [
+        "46",
+        3
+      ],
+      "optional_vae": [
+        "46",
+        4
+      ]
+    },
+    "class_type": "KSampler (Efficient)",
+    "_meta": {
+      "title": "KSampler (Efficient)"
+    }
+  },
+  "48": {
+    "inputs": {
+      "text_positive": "cartoon of 20 year old woman (brown short crop hair, wireframe glasses), (handing lunchbag to kids:1.4), kid taking lunchbag, suburban family room background",
+      "text_negative": "",
+      "milehigh": "Disney Animation_Animation",
+      "log_prompt": false
+    },
+    "class_type": "MilehighStyler",
+    "_meta": {
+      "title": "Milehigh Styler"
+    }
+  },
+  "49": {
+    "inputs": {
+      "preset": "custom",
+      "text_top": "",
+      "text_bottom": "Though it's nice when the kids\nhead to school and I can relax",
+      "font_name": "Roboto-Regular.ttf",
+      "max_font_size": 150,
+      "font_color": "black",
+      "font_outline": "none",
+      "bar_color": "white",
+      "bar_options": "bottom",
+      "font_color_hex": "#000000",
+      "bar_color_hex": "#000000",
+      "image": [
+        "47",
+        5
+      ]
+    },
+    "class_type": "CR Simple Meme Template",
+    "_meta": {
+      "title": "📱 CR Simple Meme Template"
+    }
+  },
+  "51": {
+    "inputs": {
+      "ckpt_name": "starlightXLAnimated_v3.safetensors",
+      "vae_name": "Baked VAE",
+      "clip_skip": -2,
+      "lora_name": "lcm.safetensors",
+      "lora_model_strength": 1,
+      "lora_clip_strength": 1,
+      "positive": [
+        "53",
+        0
+      ],
+      "negative": [
+        "53",
+        1
+      ],
+      "token_normalization": "none",
+      "weight_interpretation": "comfy",
+      "empty_latent_width": 1024,
+      "empty_latent_height": 1024,
+      "batch_size": 1
+    },
+    "class_type": "Efficient Loader",
+    "_meta": {
+      "title": "Efficient Loader"
+    }
+  },
+  "52": {
+    "inputs": {
+      "seed": 851590489004658,
+      "steps": 12,
+      "cfg": 2,
+      "sampler_name": "lcm",
+      "scheduler": "karras",
+      "denoise": 1,
+      "preview_method": "auto",
+      "vae_decode": "true",
+      "model": [
+        "51",
+        0
+      ],
+      "positive": [
+        "51",
+        1
+      ],
+      "negative": [
+        "51",
+        2
+      ],
+      "latent_image": [
+        "51",
+        3
+      ],
+      "optional_vae": [
+        "51",
+        4
+      ]
+    },
+    "class_type": "KSampler (Efficient)",
+    "_meta": {
+      "title": "KSampler (Efficient)"
+    }
+  },
+  "53": {
+    "inputs": {
+      "text_positive": "cartoon of extreme close up of hand, touching vertical book on book shelf, styled like illustrated cartoon",
+      "text_negative": "bad fingers, bad hands, malformed hands, multiple hands",
+      "milehigh": "Disney Animation_Animation",
+      "log_prompt": false
+    },
+    "class_type": "MilehighStyler",
+    "_meta": {
+      "title": "Milehigh Styler"
+    }
+  },
+  "54": {
+    "inputs": {
+      "ckpt_name": "starlightXLAnimated_v3.safetensors",
+      "vae_name": "Baked VAE",
+      "clip_skip": -2,
+      "lora_name": "lcm.safetensors",
+      "lora_model_strength": 1,
+      "lora_clip_strength": 1,
+      "positive": [
+        "56",
+        0
+      ],
+      "negative": [
+        "56",
+        1
+      ],
+      "token_normalization": "none",
+      "weight_interpretation": "comfy",
+      "empty_latent_width": 1024,
+      "empty_latent_height": 1024,
+      "batch_size": 1
+    },
+    "class_type": "Efficient Loader",
+    "_meta": {
+      "title": "Efficient Loader"
+    }
+  },
+  "55": {
+    "inputs": {
+      "seed": 1078544644003683,
+      "steps": 13,
+      "cfg": 2,
+      "sampler_name": "lcm",
+      "scheduler": "karras",
+      "denoise": 1,
+      "preview_method": "auto",
+      "vae_decode": "true",
+      "model": [
+        "54",
+        0
+      ],
+      "positive": [
+        "54",
+        1
+      ],
+      "negative": [
+        "54",
+        2
+      ],
+      "latent_image": [
+        "54",
+        3
+      ],
+      "optional_vae": [
+        "54",
+        4
+      ]
+    },
+    "class_type": "KSampler (Efficient)",
+    "_meta": {
+      "title": "KSampler (Efficient)"
+    }
+  },
+  "56": {
+    "inputs": {
+      "text_positive": "Spiral stairways leading down secret passage, into darkness with blue glow, digital computers, screens behind her, cc tv feeds, cartoon of 20 year old woman (brown short crop hair, wireframe glasses)",
+      "text_negative": "",
+      "milehigh": "Disney Animation_Animation",
+      "log_prompt": false
+    },
+    "class_type": "MilehighStyler",
+    "_meta": {
+      "title": "Milehigh Styler"
+    }
+  },
+  "57": {
+    "inputs": {
+      "preset": "custom",
+      "text_top": "",
+      "text_bottom": "picking up a good book or even\npushing it inside the bookshelf",
+      "font_name": "Roboto-Regular.ttf",
+      "max_font_size": 150,
+      "font_color": "black",
+      "font_outline": "none",
+      "bar_color": "white",
+      "bar_options": "bottom",
+      "font_color_hex": "#000000",
+      "bar_color_hex": "#000000",
+      "image": [
+        "52",
+        5
+      ]
+    },
+    "class_type": "CR Simple Meme Template",
+    "_meta": {
+      "title": "📱 CR Simple Meme Template"
+    }
+  },
+  "58": {
+    "inputs": {
+      "preset": "custom",
+      "text_top": "",
+      "text_bottom": "to re-enter my secret world\nwhere I can keep all safe",
+      "font_name": "Roboto-Regular.ttf",
+      "max_font_size": 150,
+      "font_color": "black",
+      "font_outline": "none",
+      "bar_color": "white",
+      "bar_options": "bottom",
+      "font_color_hex": "#000000",
+      "bar_color_hex": "#000000",
+      "image": [
+        "55",
+        5
+      ]
+    },
+    "class_type": "CR Simple Meme Template",
+    "_meta": {
+      "title": "📱 CR Simple Meme Template"
+    }
+  },
+  "59": {
+    "inputs": {
+      "ckpt_name": "starlightXLAnimated_v3.safetensors",
+      "vae_name": "Baked VAE",
+      "clip_skip": -2,
+      "lora_name": "lcm.safetensors",
+      "lora_model_strength": 1,
+      "lora_clip_strength": 1,
+      "positive": [
+        "61",
+        0
+      ],
+      "negative": [
+        "61",
+        1
+      ],
+      "token_normalization": "none",
+      "weight_interpretation": "comfy",
+      "empty_latent_width": 1024,
+      "empty_latent_height": 1024,
+      "batch_size": 1
+    },
+    "class_type": "Efficient Loader",
+    "_meta": {
+      "title": "Efficient Loader"
+    }
+  },
+  "60": {
+    "inputs": {
+      "seed": 49142047746648,
+      "steps": 8,
+      "cfg": 2,
+      "sampler_name": "lcm",
+      "scheduler": "karras",
+      "denoise": 1,
+      "preview_method": "auto",
+      "vae_decode": "true",
+      "model": [
+        "59",
+        0
+      ],
+      "positive": [
+        "59",
+        1
+      ],
+      "negative": [
+        "59",
+        2
+      ],
+      "latent_image": [
+        "59",
+        3
+      ],
+      "optional_vae": [
+        "59",
+        4
+      ]
+    },
+    "class_type": "KSampler (Efficient)",
+    "_meta": {
+      "title": "KSampler (Efficient)"
+    }
+  },
+  "61": {
+    "inputs": {
+      "text_positive": "cartoon of 20 year old woman (brown short crop hair, wireframe glasses), zipping up super hero armored black leather costume, full body wide shot, grabbing weapon tools",
+      "text_negative": "nsfw",
+      "milehigh": "sai-comic book_Uncategorized",
+      "log_prompt": false
+    },
+    "class_type": "MilehighStyler",
+    "_meta": {
+      "title": "Milehigh Styler"
+    }
+  },
+  "62": {
+    "inputs": {
+      "preset": "custom",
+      "text_top": "",
+      "text_bottom": "but I have to be prepared, always\nhaving the right tools available",
+      "font_name": "Roboto-Regular.ttf",
+      "max_font_size": 150,
+      "font_color": "black",
+      "font_outline": "none",
+      "bar_color": "white",
+      "bar_options": "bottom",
+      "font_color_hex": "#000000",
+      "bar_color_hex": "#000000",
+      "image": [
+        "60",
+        5
+      ]
+    },
+    "class_type": "CR Simple Meme Template",
+    "_meta": {
+      "title": "📱 CR Simple Meme Template"
+    }
+  },
+  "63": {
+    "inputs": {
+      "ckpt_name": "starlightXLAnimated_v3.safetensors",
+      "vae_name": "Baked VAE",
+      "clip_skip": -2,
+      "lora_name": "lcm.safetensors",
+      "lora_model_strength": 1,
+      "lora_clip_strength": 1,
+      "positive": [
+        "65",
+        0
+      ],
+      "negative": [
+        "65",
+        1
+      ],
+      "token_normalization": "none",
+      "weight_interpretation": "comfy",
+      "empty_latent_width": 1024,
+      "empty_latent_height": 1024,
+      "batch_size": 1
+    },
+    "class_type": "Efficient Loader",
+    "_meta": {
+      "title": "Efficient Loader"
+    }
+  },
+  "64": {
+    "inputs": {
+      "seed": 49142047746644,
+      "steps": 8,
+      "cfg": 2,
+      "sampler_name": "lcm",
+      "scheduler": "karras",
+      "denoise": 1,
+      "preview_method": "auto",
+      "vae_decode": "true",
+      "model": [
+        "63",
+        0
+      ],
+      "positive": [
+        "63",
+        1
+      ],
+      "negative": [
+        "63",
+        2
+      ],
+      "latent_image": [
+        "63",
+        3
+      ],
+      "optional_vae": [
+        "63",
+        4
+      ]
+    },
+    "class_type": "KSampler (Efficient)",
+    "_meta": {
+      "title": "KSampler (Efficient)"
+    }
+  },
+  "65": {
+    "inputs": {
+      "text_positive": "cartoon of 20 year old woman (brown short crop hair, wireframe glasses, brown leather armored super hero suit), flying in air, red explosions, (expression of anger:1.3) on her face",
+      "text_negative": "",
+      "milehigh": "Disney Animation_Animation",
+      "log_prompt": false
+    },
+    "class_type": "MilehighStyler",
+    "_meta": {
+      "title": "Milehigh Styler"
+    }
+  },
+  "66": {
+    "inputs": {
+      "preset": "custom",
+      "text_top": "",
+      "text_bottom": "because really, I'm not just\nMom...I'm SUPER Mom!!!",
+      "font_name": "Roboto-Regular.ttf",
+      "max_font_size": 150,
+      "font_color": "black",
+      "font_outline": "none",
+      "bar_color": "white",
+      "bar_options": "bottom",
+      "font_color_hex": "#000000",
+      "bar_color_hex": "#000000",
+      "image": [
+        "64",
+        5
+      ]
+    },
+    "class_type": "CR Simple Meme Template",
+    "_meta": {
+      "title": "📱 CR Simple Meme Template"
+    }
+  },
+  "68": {
+    "inputs": {
+      "border_thickness": 20,
+      "border_color": "white",
+      "outline_thickness": 5,
+      "outline_color": "black",
+      "max_columns": 4,
+      "border_color_hex": "#000000",
+      "images": [
+        "78",
+        0
+      ]
+    },
+    "class_type": "CR Image Grid Panel",
+    "_meta": {
+      "title": "🌁 CR Image Grid Panel"
+    }
+  },
+  "78": {
+    "inputs": {
+      "image1": [
+        "28",
+        0
+      ],
+      "image2": [
+        "29",
+        0
+      ],
+      "image3": [
+        "33",
+        0
+      ],
+      "image4": [
+        "49",
+        0
+      ],
+      "image5": [
+        "57",
+        0
+      ],
+      "image6": [
+        "58",
+        0
+      ],
+      "image7": [
+        "62",
+        0
+      ],
+      "image8": [
+        "66",
+        0
+      ]
+    },
+    "class_type": "ImpactMakeImageBatch",
+    "_meta": {
+      "title": "Make Image Batch"
+    }
+  }
+}
