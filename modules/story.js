@@ -5,6 +5,7 @@ export class story {
         this.omk = params.omk;
         this.story = params.story;
         this.cont = params.cont;
+        this.urlNoImage = params.urlNoImage ? params.urlNoImage : 'https://samszo.github.io/genStory24/assets/img/papi-GenStory24.png';
         var grid, items=[], nodes=[], graphCode;
         this.init = function () {
             //me.createChainEvents();
@@ -96,7 +97,7 @@ export class story {
             let ec = {'node':'item'+e['o:id']+'_'+num};
             ec.code=`${ec.node}("
             <span>${e['o:title']}</span>
-            <img src='${e.thumbnail_display_urls?e.thumbnail_display_urls.medium:"assets/img/papi-GenStory24.png"}' style='width:10px;min-height:0'/>
+            <img src='${e.thumbnail_display_urls?e.thumbnail_display_urls.medium:me.urlNoImage}' style='width:10px;min-height:0'/>
             ")`;
             ec.class=`
             class ${ec.node} image`;
