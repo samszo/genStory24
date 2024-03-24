@@ -97,7 +97,7 @@ export class story {
             let ec = {'node':'item'+e['o:id']+'_'+num};
             ec.code=`${ec.node}("
             <span>${e['o:title']}</span>
-            <img src='${e.thumbnail_display_urls?e.thumbnail_display_urls.medium:me.urlNoImage}' style='width:10px;min-height:0'/>
+            <img src='${e.thumbnail_display_urls.medium?e.thumbnail_display_urls.medium:me.urlNoImage}' style='width:10px;min-height:0'/>
             ")`;
             ec.class=`
             class ${ec.node} image`;
