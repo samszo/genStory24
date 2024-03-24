@@ -1,4 +1,4 @@
-import {omk} from '../modules/omk.js';
+import {omk} from './omk.js';
 export class auth {
     constructor(params) {
         var me = this;
@@ -17,6 +17,8 @@ export class auth {
             btnLogin, nameLogin, alertAuth, alertMail, alertServer, alertUnknown, alertOpenai;
                 
         this.init = function () {
+            if(me.apiOmk) me.apiOmk += me.apiOmk.slice(-1)=='/' ? "" : "/";
+            me.omk = new omk({'api':me.apiOmk});
                                                                                          
         }
 

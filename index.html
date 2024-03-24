@@ -2,7 +2,20 @@
 <html>
 <head>
     <title>Gen Story 2024</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css">
+    <script src="assets/js/d3.min.js"></script>
+    <script src="https://kit.fontawesome.com/41992aa5bc.js" crossorigin="anonymous"></script>
+    <script src="assets/js/bootstrap.bundle.min.js"></script>
+
+
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/cover.css">
+    <link rel="stylesheet" href="assets/css/loader.css">
+    
+    <style>
+        iframe{
+            width: 100%;
+        }
+    </style>
 </head>
 <body class="d-flex h-100 text-center text-white bg-dark">
 
@@ -15,8 +28,12 @@
                     <div class="container-fluid">
                         <a class="navbar-brand" href="#">
                             <img src="assets/img/logo-paragraphe-blanc.svg" alt="Logo" width="86"
-                                class="d-inline-block align-text-top">
-                            Gen Story 2024
+                                class="d-inline-block">
+                            <img src="assets/img/Rochester_Institute_of_Technology_seal.svg" alt="Logo" width="42"
+                                class="d-inline-block">
+                            <img src="assets/img/logo-artec.png" alt="Logo" width="86"
+                                class="d-inline-block">
+                            <label class="text-white" style="vertical-align: -webkit-baseline-middle;">Gen Story 2024</label>
                         </a>
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                             data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -26,19 +43,34 @@
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul id="navbarMain" class="navbar-nav me-auto mb-2 mb-lg-0">
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                    <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown"
                                         aria-expanded="false">
-                                        <i class="fa-solid fa-file-export"></i>
+                                        <i class="fa-solid fa-film"></i>
                                         <span id="selectStory">Choose story</span>
                                     </a>
                                     <ul id="ddStory" class="dropdown-menu">
                                     </ul>
                                 </li>
                                 <li class="nav-item mx-2">
-                                    <button id="btnNewFragment" type="button" class="btn btn-danger">
-                                        <i class="fa-solid fa-map-location-dot"></i>
+                                    <button id="btnShowProgress" type="button" class="btn btn-danger">
+                                        <i class="fa-light fa-arrow-progress"></i>
                                     </button>
                                 </li>
+                                <li class="nav-item mx-2">
+                                    <button id="btnNewStory" type="button" class="btn btn-danger">
+                                        <i class="fa-solid fa-shuffle"></i>
+                                    </button>
+                                </li>
+                                <li>
+                                    <form autocomplete="off">
+                                      <div class="input-group">
+                                        <span class="input-group-text" id="url-addon">@</span>
+                                        <input id="inptUrl" type="text" class="form-control" 
+                                            size="64" placeholder="" aria-label="" aria-describedby="url-addon">
+                                      </div>
+                                    </form>
+                                </li>                                                                        
+
                             </ul>
                         </div>
                     </div>
@@ -62,34 +94,17 @@
                                         Story details
                                     </button>
                                 </h2>
-                                <div id="collapseThree" class="accordion-collapse collapse"
+                                <div id="collapseThree" class="accordion-collapse show"
                                     data-bs-parent="#accordionJDC">
                                     <div class="accordion-body">
-                                        <div id="contentDetails">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="accordion-item text-white bg-dark">
-                                <h2 class="accordion-header">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                                        data-bs-target="#collapseFour" aria-expanded="false"
-                                        aria-controls="collapseFour">
-                                        Video list
-                                    </button>
-                                </h2>
-                                <div id="collapseFour" class="accordion-collapse collapse" 
-                                    data-bs-parent="#accordionJDC">
-                                    <div class="accordion-body" style="height: 600px;overflow-y: scroll;">
-                                        <div id="contentResources" class="row g-4">
-
+                                        <div id="contentDetails">                                            
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-8" id="contentMap">
+                    <div class="col-8 overflow-y-scroll" id="contentMap">
                     </div>
                 </div>
             </div>
@@ -102,7 +117,7 @@
                     <img style="height: 40px;" src="assets/img/logo-paragraphe-blanc.svg"
                         alt="Laboratoire Paragraphe" />
                 </a>
-                <a target="_blank" href="https://github.com/samszo/HDR">
+                <a target="_blank" href="https://github.com/samszo/genStory24">
                     <button type="button" class="btn btn-danger">
                         <i class="fa-brands fa-github fa-2xl"></i>
                     </button>
@@ -114,22 +129,58 @@
 
     </div>
 
+    <script type="module" >
 
-    <div id="loading-container">
-        <div class="loadingio-spinner-double-ring-4dols36ufwg" id="ws-loading">
-            <div class="ldio-6pd26u1x99x">
-                <div></div>
-                <div></div>
-                <div>
-                    <div></div>
-                </div>
-                <div>
-                    <div></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.bundle.min.js"></script>
+        import {auth} from './modules/auth.js';
+        import {story} from './modules/story.js';
+        import {appUrl} from './modules/appUrl.js';
+        
+        let a = new auth({apiOmk:'https://tdcw24.generateur.art/api/'}),
+        aUrl = new appUrl({'url':new URL(document.location),'tgtIn':d3.select("#inptUrl").node(),'tgtBtn':d3.select("#url-addon")}),
+        stories = a.omk.searchItems('resource_class_id=135',setMenuStory,false),
+        curStory=false,
+        rectFooter = d3.select('footer').node().getBoundingClientRect(),
+        rectHeader = d3.select('header').node().getBoundingClientRect();
+        //dimensionne la page
+        d3.select('#contentMap').style('height',window.innerHeight-rectHeader.bottom-rectFooter.top+"px");
+
+        d3.select('#btnNewStory').on('click',e=>{
+            if(curStory)curStory.createChainEvents();
+        });
+        d3.select('#btnShowProgress').on('click',e=>{
+            if(curStory)curStory.createDiagram();
+        });
+        
+
+        function setMenuStory(json){
+            stories = json;
+            d3.select('#ddStory').selectAll('li').data(json).enter().append('li')
+                .append('a').attr('class',"dropdown-item").text(d=>d['o:title'])
+                .on('click',showStory);
+            if(aUrl.params.has('idStory'))showStory(null,null,aUrl.params.get('idStory'));
+        }
+        function showStory(e,d, id=false){
+            if(id)d=stories.filter(s=>s['o:id']==id)[0];
+            aUrl.change('idStory',d['o:id']);
+            console.log(e,d);
+            a.omk.loader.hide(true);
+            curStory = new story({'omk':a.omk,'cont':d3.select('#contentMap'),'story':d});
+            d3.select('#contentDetails').select('iframe').remove();
+            d3.select('#contentDetails').append('iframe')
+                .attr('height',window.innerHeight-rectHeader.bottom-rectFooter.top-100+"px")
+                .attr('src',"https://tdcw24.generateur.art/s/participants-work/item/"+d['o:id']);
+            let act = aUrl.params.has('action') ? aUrl.params.get('action') : false;
+            switch (act) {
+                case 'diagram':
+                    if(curStory)curStory.createDiagram();                                                            
+                    break;            
+                case 'newStory':
+                    if(curStory)curStory.createChainEvents();                                        
+                    break;            
+            }
+        }
+
+    </script>        
+
 </body>
 </html>
