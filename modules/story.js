@@ -85,9 +85,9 @@ export class story {
                     }
                 })
             }else{
-                //${startNode} ${op['o:local_name']+d['o:id']}{No ${op['o:label']}                    
+                //go to end event
                 graphCode += `
-                    ${op['o:local_name']+d['o:id']} --> storyEnd
+                    ${startNode} --> storyEnd
                     `;
             }
         }
