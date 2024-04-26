@@ -6,7 +6,9 @@ export class story {
         this.story = params.story;
         this.cont = params.cont;
         this.urlNoImage = params.urlNoImage ? params.urlNoImage : 'https://samszo.github.io/genStory24/assets/img/papi-GenStory24.png';
-        var grid, items=[], nodes=[], graphCode;
+        var grid, items=[], nodes=[], graphCode,
+        eventValid=[], eventFail=[],isValid=[],linkValid=[],linkFail=[],links;
+
         this.init = function () {
             //me.createChainEvents();
             mermaid.initialize({ startOnLoad: false,theme: 'dark', });
@@ -20,9 +22,19 @@ export class story {
 
         this.createDiagram = async function(){
             items=[];
+            eventValid=[], eventFail=[],isValid=[],linkValid=[0],linkFail=[],links=0;
             clearScene();
             let niv = 0, graph = me.cont.append('pre').attr('id','mermaidGraph').attr("class","mermaid");
-            graphCode = `flowchart TD`;
+            graphCode = `
+            %%{
+                init: {
+                  'theme': 'black',
+                  'themeVariables': {
+                    'edgeLabelBackground':'white'
+                  }
+                }
+            }%%
+            flowchart TD`;
             //create initial condition
             if(me.story['genstory:hasInitialCondition']){
                 graphCode += `
@@ -37,6 +49,25 @@ export class story {
                     `;
             }
 
+            graphCode += `
+            classDef StartEnd fill:green,stroke:white,stroke-width:8px
+            classDef eventValid fill:green,stroke:green,stroke-width:4px
+            classDef eventFail fill:red,stroke:red,stroke-width:4px,color:white
+            classDef isValid fill:orange,stroke:orange,stroke-width:8px,color:black
+            
+            class storyStart,storyEnd,initcond StartEnd;
+            `;
+            if(eventValid.length)graphCode+= `class ${eventValid.join(',')} eventValid;
+            `;
+            if(eventFail.length)graphCode+= `class ${eventFail.join(',')} eventFail;
+            `;
+            if(isValid.length)graphCode+= `class ${isValid.join(',')} isValid;
+            `;
+            if(linkValid.length)graphCode+= `linkStyle ${linkValid.join(',')} stroke:green,color:green,stroke-width:4px,color:green
+            `;
+            if(linkFail.length)graphCode+= `linkStyle ${linkFail.join(',')} stroke:red,color:red
+            `;
+
             //render graphCode
             console.log(graphCode);        
             graph.html(graphCode);
@@ -47,7 +78,7 @@ export class story {
 
         //create event subgraph
         function createEventSubgraph(d,p,startNode,niv){
-            let op = me.omk.getPropByTerm(p);
+            let op = me.omk.getPropByTerm(p);            
             if(d[p]){
                 d[p].forEach((vr,j)=>{
                     //check if node exist
@@ -55,6 +86,10 @@ export class story {
                         graphCode += `
                         ${startNode} |${op['o:label']}|item${vr.value_resource_id}                                        
                         `;
+                        links++;
+                        if(startNode.startsWith('initcond'))linkValid.push(links);
+                        if(startNode.startsWith('chooseValid'))linkValid.push(links);
+                        if(startNode.startsWith('chooseFail'))linkFail.push(links);
                     }else if(vr.type=="resource"){
                         //get properties of resource
                         let r = getItem(vr.value_resource_id);
@@ -70,6 +105,17 @@ export class story {
                             end
                             ${startNode} |${op['o:label']}|item${r['o:id']}                                        
                             `;
+                            isValid.push(`isValid${r['o:id']}`);
+                            eventFail.push(`chooseFail${r['o:id']}`);
+                            eventValid.push(`chooseValid${r['o:id']}`);
+                            links++;
+                            linkValid.push(links);
+                            links++;
+                            linkValid.push(links);
+                            links++;
+                            linkFail.push(links);
+                            links++;
+                            linkValid.push(links);
                             //create fail event
                             createEventSubgraph(r,'genstory:hasEventAfterFailure','chooseFail'+r['o:id']+'-->',niv+1);
                             //create valid event
@@ -81,6 +127,12 @@ export class story {
                             ${startNode} |${op['o:label']}|item${r['o:id']}                                        
                             item${r['o:id']} --> |No valid or fail event|storyEnd                                        
                             `;
+                            links++;
+                            if(startNode.startsWith('initcond'))linkValid.push(links);
+                            if(startNode.startsWith('chooseValid'))linkValid.push(links);
+                            if(startNode.startsWith('chooseFail'))linkFail.push(links);
+                            links++;
+                            linkFail.push(links);
                         } 
                     }
                 })
@@ -89,7 +141,9 @@ export class story {
                 graphCode += `
                     ${startNode} storyEnd
                     `;
-            }
+                links++;
+                linkValid.push(links);
+    }
         }
         //
 
