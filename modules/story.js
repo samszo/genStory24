@@ -87,7 +87,7 @@ export class story {
             }else{
                 //go to end event
                 graphCode += `
-                    ${startNode} --> storyEnd
+                    ${startNode} storyEnd
                     `;
             }
         }
