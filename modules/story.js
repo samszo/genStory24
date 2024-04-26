@@ -85,8 +85,8 @@ export class story {
                     }
                 })
             }else{
+                //${startNode} ${op['o:local_name']+d['o:id']}{No ${op['o:label']}                    
                 graphCode += `
-                    ${startNode} ${op['o:local_name']+d['o:id']}{No ${op['o:label']}
                     ${op['o:local_name']+d['o:id']} --> storyEnd
                     `;
             }
