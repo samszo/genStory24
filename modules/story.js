@@ -150,7 +150,7 @@ export class story {
         this.addEvent=function(e,num){
             let ec = {'node':'item'+e['o:id']+'_'+num};
             ec.code=`${ec.node}("
-            <span>${e['o:title']}</span>
+            <span>${e['o:title']}</span>            
             <img src='${e.thumbnail_display_urls.medium?e.thumbnail_display_urls.medium:me.urlNoImage}' style='width:10px;min-height:0'/>
             ")`;
             ec.class=`
@@ -178,16 +178,8 @@ export class story {
                     graphCode += ` ${ec.code} `;
                     classes = `
                     ${ec.class}`;
-                    //choose if event is success
-                    if((d3.randomInt(100)())>50){
-                        //choose one of the success event
-                        graphCode += ` --> `;
-                        event = me.getAleaEvent(event,'genstory:hasEventAfterValid');
-                    }else{
-                        //choose one of fail event
-                        graphCode += ` --x `;
-                        event = me.getAleaEvent(event,'genstory:hasEventAfterFailure');                
-                    }
+                    //choose next event
+                    event = getNextEvent(event,['genstory:hasEventAfterValid','genstory:hasEventAfterFailure']);
                     num ++;
                 }
                 graphCode += ` storyEnd(The End) `;
@@ -209,6 +201,54 @@ export class story {
             let vb = graph.select('svg').attr('viewBox').split(' ');
             graph.select('svg').attr('viewBox','').attr('style',`width:${vb[2]}px;height:${vb[3]}px;`)            
             me.omk.loader.hide(true);
+        }
+
+        function getNextEvent(e, arrP){
+            let choice, event, choiceP, min=0, max=0;
+            arrP.forEach(p=>{
+                min = getMinMaxAnnoValue(e,p,"schema:minValue",min,'min');
+                max = getMinMaxAnnoValue(e,p,"schema:maxValue",max,'max');
+            })
+            if(max!=0){            
+                choice = d3.randomInt(min, max)();            
+                arrP.forEach(p=>{
+                    e[p].forEach(ve=>{
+                        if(!event && ve.min <= choice && ve.max >= choice){
+                            choiceP = p;
+                            event = me.omk.getItem(ve.value_resource_id);
+                        }
+                    })
+                })
+            }
+            if(!event){
+                choiceP = arrP[Math.floor(Math.random()*arrP.length)];
+                event = me.getAleaEvent(e,choiceP);
+            }
+            switch (choiceP) {
+                case 'genstory:hasEventAfterValid':
+                    graphCode += ` --> `;                    
+                    break;            
+                case 'hasEventAfterFailure':
+                    graphCode += ` --x `;                    
+                    break;            
+                default:
+                    graphCode += ` --> `;
+                    break;
+            }
+            return event;
+        }
+
+        function getMinMaxAnnoValue(e, p, a, mm, mLabel){
+            if(e[p]){
+                e[p].forEach(ve=>{
+                    if(ve["@annotation"] && ve["@annotation"][a]){
+                        ve[mLabel] = parseInt(ve["@annotation"][a][0]["@value"]);
+                        if(mLabel=='min')mm = ve[mLabel] < mm ? ve[mLabel] : mm; 
+                        if(mLabel=='max')mm = ve[mLabel] > mm ? ve[mLabel] : mm; 
+                    }
+                });    
+            }
+            return mm;
         }
 
         this.getAleaEvent = function(e,p){

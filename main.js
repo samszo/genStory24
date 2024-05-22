@@ -6,8 +6,8 @@ import {moteur} from './modules/moteur.js';
 let a = new auth({'navbar':false,
         mail:'samuel.szoniecky@univ-paris8.fr',
         apiOmk:'http://localhost/omk_genstory_24/api/',
-        ident: 'U88iy6ZRDfShexC23K9CGGG0sx6LKYn2',
-        key:'XUbZKSuaERYYhy4cIulVbSdItfC1CBMb',        
+        ident: 'xMRcEVNwozFp1ZUtu08bvcUpv3AhDJgj',
+        key:'xpyKvL1RNloBC6zS8zCysobaNbv83Irb',        
     });
 //omeka connexion
 a.getUser(u=>{

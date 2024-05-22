@@ -135,7 +135,8 @@
         import {story} from './modules/story.js';
         import {appUrl} from './modules/appUrl.js';
         
-        let a = new auth({apiOmk:'https://tdcw24.generateur.art/api/'}),
+        //let a = new auth({apiOmk:'https://tdcw24.generateur.art/api/'}),
+        let a = new auth({apiOmk:'http://localhost/omk_genstory_24/api/'}),
         aUrl = new appUrl({'url':new URL(document.location),'tgtIn':d3.select("#inptUrl").node(),'tgtBtn':d3.select("#url-addon")}),
         stories = a.omk.searchItems('resource_class_id=135',setMenuStory,false),
         curStory=false,
