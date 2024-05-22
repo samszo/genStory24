@@ -229,7 +229,7 @@ export class story {
                 case 'genstory:hasEventAfterValid':
                     graphCode += ` --> `;                    
                     break;            
-                case 'hasEventAfterFailure':
+                case 'genstory:hasEventAfterFailure':
                     graphCode += ` --x `;                    
                     break;            
                 default:
