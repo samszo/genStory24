@@ -210,7 +210,8 @@ export class story {
                 max = getMinMaxAnnoValue(e,p,"schema:maxValue",max,'max');
             })
             if(max!=0){            
-                choice = d3.randomInt(min, max)();            
+                choice = d3.randomInt(min, max)();
+                console.log('getNextEvent:choice'+choice+' between '+min+', '+max);            
                 arrP.forEach(p=>{
                     e[p].forEach(ve=>{
                         if(!event && ve.min <= choice && ve.max >= choice){
@@ -235,6 +236,7 @@ export class story {
                     graphCode += ` --> `;
                     break;
             }
+            console.log('getNextEvent:choiceP'+choiceP);            
             return event;
         }
 
