@@ -5,7 +5,8 @@ import {moteur} from './modules/moteur.js';
 //Omeka parameters
 let a = new auth({'navbar':false,
         mail:'samuel.szoniecky@univ-paris8.fr',
-        apiOmk:'http://localhost/omk_genstory_24/api/',
+        //apiOmk:'http://localhost/omk_genstory_24/api/',
+        apiOmk:'https://tdcw24.generateur.art/api/',
         ident: 'xMRcEVNwozFp1ZUtu08bvcUpv3AhDJgj',
         key:'xpyKvL1RNloBC6zS8zCysobaNbv83Irb',        
     });
