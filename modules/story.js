@@ -17,21 +17,23 @@ export class story {
         this.init = function () {
             //me.createChainEvents();
             mermaid.initialize({ startOnLoad: false,theme: 'dark', });
-            //me.createDiagram(); 
+            isValidComfyUi(me.comfyUIserver);           
         }
 
-        async function isValidComfyUi(string) {
+        function isValidComfyUi(string) {
             if(!me.comfyUIserver)return false;
             try {
                 let clientId = Math.random().toString(16).slice(2);//'369c21bf688146b1b07e40b519fd7bdf';
                 comfyUI = new ComfyUIClient(me.comfyUIserver, clientId);
                 // Connect to server
-                await comfyUI.check();                
-                comfyUI.disconnect();
-                return true;
+                comfyUI.check(e=>{
+                    me.comfyUIserver=false;
+                }, e=>{
+                    console.log('comfyui OK')
+                    comfyUI.disconnect();
+                });                
             } catch (err) {
                 me.comfyUIserver=false  
-                return false;
             }
           }
 
@@ -243,8 +245,6 @@ export class story {
         this.createChainEvents = async function(){
             me.omk.loader.show();
             clearScene();
-
-            me.comfyUIserver = await isValidComfyUi(me.comfyUIserver);           
 
             //get the prompt model
             promptModel =  await d3.json('assets/data/promptTest.json');

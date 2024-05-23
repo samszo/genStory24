@@ -70,7 +70,15 @@
                                       </div>
                                     </form>
                                 </li>                                                                        
-
+                                <li>
+                                    <form autocomplete="off">
+                                      <div class="input-group">
+                                        <span class="input-group-text" id="url-comfyui"><i class="fa-regular fa-microchip-ai"></i></span>
+                                        <input id="aiUrl" type="text" class="form-control" 
+                                            size="64" placeholder="" aria-label="" aria-describedby="url-addon">
+                                      </div>
+                                    </form>
+                                </li>                                                                        
                             </ul>
                         </div>
                     </div>
@@ -136,12 +144,13 @@
         import {appUrl} from './modules/appUrl.js';
         import {moteur} from './modules/moteur.js';
         
-        /*
+        //
         let domainOmk = 'https://tdcw24.generateur.art',
             domainMoteur = 'https://gestion.generateur.art',
-        */
+        /*
         let domainOmk = 'http://localhost/omk_genstory_24',
             domainMoteur = 'http://localhost/generateur',
+        */
             
         a = new auth({
             apiOmk:domainOmk+'/api/',
@@ -158,14 +167,15 @@
         urlMoteur = domainMoteur+'/apiRead.php',
         m = new moteur({'apiUrl':urlMoteur,'id_dico':169,'id_oeu':72,'defaultGen':"[prompt_scene]"})
         
-        //image generator parameter
-        const comfyUiServerAddress = '127.0.0.1:8188';
-
         //dimensionne la page
         d3.select('#contentMap').style('height',window.innerHeight-rectHeader.bottom-rectFooter.top+"px");
 
+        //events
         d3.select('#btnNewStory').on('click',e=>{
-            if(curStory)curStory.createChainEvents();
+            if(curStory){
+                showStory(null,curStory.story);
+                curStory.createChainEvents();
+            }
         });
         d3.select('#btnShowProgress').on('click',e=>{
             if(curStory)curStory.createDiagram();
@@ -180,6 +190,10 @@
             if(aUrl.params.has('idStory'))showStory(null,null,aUrl.params.get('idStory'));
         }
         function showStory(e,d, id=false){
+
+            //image generator parameter
+            const comfyUiServerAddress = document.getElementById('aiUrl').value;// '127.0.0.1:8188';
+
             if(id)d=stories.filter(s=>s['o:id']==id)[0];
             aUrl.change('idStory',d['o:id']);
             console.log(e,d);

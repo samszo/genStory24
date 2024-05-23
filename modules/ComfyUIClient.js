@@ -61,12 +61,17 @@ export class ComfyUIClient {
     });
   }
 
-  async check() {
+  async check(fctError,fctOpen) {
     const url = `ws://${this.serverAddress}/ws?clientId=${this.clientId}`;
     console.log(`CHECK Connecting to url: ${url}`);
     try {
-      this.ws = await new WebSocket(url);
-      return true;
+      this.ws = new WebSocket(url);      
+      this.ws.addEventListener("error", (event) => {
+        fctError();
+      });      
+      this.ws.addEventListener("open", (event) => {
+        fctOpen
+      });
     } catch (error) {
       return false;
     }
