@@ -2,4 +2,4 @@
 # Project Title : Dawn of the Wasteland: A College Odyssey
 
 I have always been a fan of The Walking Dead series which has grown into a love for the franchise and other similar apocalyptic themed works. So it was only natural that I used that interest to inspire my story
-for this project.
+for this project. Titled "Dawn of the Wasteland: A College Odyssey", this generative narrative follows the story of a character in college navigating the beginning of a post-apocalyptic world and their journey to find their family. The main question is can the user select the best choices to keep the character alive? My inspiration for this story derives from other sources as well - for one, an apocalyptic journey shown from the perspective of a college student stems from my curiosity as a college student myself and a horror fan who has yet to see a fictional experience of a college-aged student navigate worlds such as the ones I've seen. Other inspirations are The Walking Dead mobile game and a similar series, The Last of Us, which I used to create the various potential storylines of the character.
