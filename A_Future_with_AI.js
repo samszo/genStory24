@@ -1,3 +1,14 @@
+import {auth} from './modules/auth.js';
+
+let domainOmk = 'https://tdcw24.generateur.art',
+
+a = new auth({
+	apiOmk:domainOmk+'/api/',
+	ident: 'kfB5UKuTy0H7F3S9bFsi6fc9kNVK6yb9',
+	key:'a1nYdFlPxNeP80pmEpveOckdB4q1ViGc',        
+});
+
+
 let questions = 
 [
 ["text1", -5, 0.9],
@@ -79,3 +90,12 @@ function get_next_state(Y_N, current_state, list_questions){
 }
 
 get_next_state(Y_N, current_state, questions);
+
+//get the questions from omeka
+let omkQuestions = a.omk.searchItems('item_set_id=357');
+
+d3.select("#spanQuestion").html(omkQuestions[0]["o:title"]);
+d3.select("#button1").on('click',e=>{
+	console.log(e);
+})
+

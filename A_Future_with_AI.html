@@ -12,12 +12,14 @@
       height: 60px;
     }
 </style>
+<script src="assets/js/d3.min.js"></script>
+
 </head>
 <body>
-<script src = "A_Future_with_AI.js"></script>
+<script type="module" src = "A_Future_with_AI.js"></script>
 <h1>A future with AI</h1>
 <img src="French_activist.png" style="width:50%; height:50%">
-<h2>Question: What is your favorite color?</h2>
+<h2>Question: <span id="spanQuestion">What is your favorite color?</span></h2>
 <button id="button1">Pass</button>
 <button id="button2">Veto</button>
 </body>
