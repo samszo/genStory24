@@ -12,20 +12,35 @@ export class story {
         this.comfyUIserver = params.comfyUIserver ? params.comfyUIserver : false;
         var maxLooop = 10, grid, items=[], nodes=[], graphCode, graph,
         eventValid=[], eventFail=[],isValid=[],linkValid=[],linkFail=[],links,
-        promptModel, comfyUI, comfyUIqueue, sameStyle = true, promptStyle="";
+        promptModel, comfyUIConnect=true, comfyUI, comfyUIqueue, sameStyle = true, promptStyle="";
 
         this.init = function () {
             //me.createChainEvents();
             mermaid.initialize({ startOnLoad: false,theme: 'dark', });
-            //me.createDiagram();            
+            //me.createDiagram(); 
         }
+
+        async function isValidComfyUi(string) {
+            if(!me.comfyUIserver)return false;
+            try {
+                let clientId = Math.random().toString(16).slice(2);//'369c21bf688146b1b07e40b519fd7bdf';
+                comfyUI = new ComfyUIClient(me.comfyUIserver, clientId);
+                // Connect to server
+                await comfyUI.check();                
+                comfyUI.disconnect();
+                return true;
+            } catch (err) {
+                me.comfyUIserver=false  
+                return false;
+            }
+          }
 
         async function newComfyClientQueue(prompt){
             // Connect to image generator
             let clientId = Math.random().toString(16).slice(2);//'369c21bf688146b1b07e40b519fd7bdf';
             comfyUI = new ComfyUIClient(me.comfyUIserver, clientId);
             // Connect to server
-            await comfyUI.connect(startComfyUI,progressComfyUI,executedComfyUI,closeComfyUI);
+            await comfyUI.connect(startComfyUI,progressComfyUI,executedComfyUI,closeComfyUI);                
             comfyUI.queuePrompt(prompt);
         }
 
@@ -228,6 +243,8 @@ export class story {
         this.createChainEvents = async function(){
             me.omk.loader.show();
             clearScene();
+
+            me.comfyUIserver = await isValidComfyUi(me.comfyUIserver);           
 
             //get the prompt model
             promptModel =  await d3.json('assets/data/promptTest.json');

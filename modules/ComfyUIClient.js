@@ -60,7 +60,19 @@ export class ComfyUIClient {
       });
     });
   }
-  
+
+  async check() {
+    const url = `ws://${this.serverAddress}/ws?clientId=${this.clientId}`;
+    console.log(`CHECK Connecting to url: ${url}`);
+    try {
+      this.ws = await new WebSocket(url);
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+
   async disconnect() {
     if (this.ws) {
       this.ws.close();
