@@ -20,7 +20,7 @@ export class ComfyUIClient {
   /*
   Connect to the Comfy server to get message and run action
   */
-  connect(fctStart,fctProgress,fctExecuted) {
+  connect(fctStart,fctProgress,fctExecuted,fctClosed) {
     return new Promise(async (resolve) => {
       if (this.ws) {
         await this.disconnect();
@@ -35,6 +35,7 @@ export class ComfyUIClient {
       });
       this.ws.addEventListener("close", () => {
         console.log("Connection closed");
+        fctClosed();
       });
       this.ws.addEventListener("error", (err) => {
         logger.error({ err }, "WebSockets error");
@@ -53,7 +54,7 @@ export class ComfyUIClient {
             fctStart(json.data.prompt_id);
           }
           if(json.type=='executed' && json.data.output){
-            fctExecuted(json.data.output);
+            fctExecuted(json.data);
           }
         }
       });

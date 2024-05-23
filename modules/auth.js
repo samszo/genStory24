@@ -18,7 +18,7 @@ export class auth {
                 
         this.init = function () {
             if(me.apiOmk) me.apiOmk += me.apiOmk.slice(-1)=='/' ? "" : "/";
-            me.omk = new omk({'api':me.apiOmk});
+            me.omk = new omk({'api':me.apiOmk,'key':me.key,'ident':me.ident,'mail':me.mail});
                                                                                          
         }
 

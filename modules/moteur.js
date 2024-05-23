@@ -8,6 +8,7 @@ export class moteur {
         this.id_dico = params.id_dico ? params.id_dico : false;
 		this.showErr = params.showErr ? params.showErr : true;
         this.niv = params.niv ? params.niv : 0;
+        this.defaultGen = params.defaultGen ? params.defaultGen : false;
         this.strct = []; 
         this.posis = [];
         this.caracts = []; 

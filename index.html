@@ -134,14 +134,33 @@
         import {auth} from './modules/auth.js';
         import {story} from './modules/story.js';
         import {appUrl} from './modules/appUrl.js';
+        import {moteur} from './modules/moteur.js';
         
-        let a = new auth({apiOmk:'https://tdcw24.generateur.art/api/'}),
-        //let a = new auth({apiOmk:'http://localhost/omk_genstory_24/api/'}),
+        /*
+        let domainOmk = 'https://tdcw24.generateur.art',
+            domainMoteur = 'https://gestion.generateur.art',
+        */
+        let domainOmk = 'http://localhost/omk_genstory_24',
+            domainMoteur = 'http://localhost/generateur',
+            
+        a = new auth({
+            apiOmk:domainOmk+'/api/',
+            ident: 'kfB5UKuTy0H7F3S9bFsi6fc9kNVK6yb9',
+            key:'a1nYdFlPxNeP80pmEpveOckdB4q1ViGc',        
+        }),
         aUrl = new appUrl({'url':new URL(document.location),'tgtIn':d3.select("#inptUrl").node(),'tgtBtn':d3.select("#url-addon")}),
         stories = a.omk.searchItems('resource_class_id=135',setMenuStory,false),
         curStory=false,
         rectFooter = d3.select('footer').node().getBoundingClientRect(),
-        rectHeader = d3.select('header').node().getBoundingClientRect();
+        rectHeader = d3.select('header').node().getBoundingClientRect(),
+
+        //text generator parameters
+        urlMoteur = domainMoteur+'/apiRead.php',
+        m = new moteur({'apiUrl':urlMoteur,'id_dico':169,'id_oeu':72,'defaultGen':"[prompt_scene]"})
+        
+        //image generator parameter
+        const comfyUiServerAddress = '127.0.0.1:8188';
+
         //dimensionne la page
         d3.select('#contentMap').style('height',window.innerHeight-rectHeader.bottom-rectFooter.top+"px");
 
@@ -165,11 +184,12 @@
             aUrl.change('idStory',d['o:id']);
             console.log(e,d);
             a.omk.loader.hide(true);
-            curStory = new story({'omk':a.omk,'cont':d3.select('#contentMap'),'story':d});
+            curStory = new story({'omk':a.omk,'cont':d3.select('#contentMap'),'story':d,'moteur':m
+                ,'comfyUIserver':comfyUiServerAddress});
             d3.select('#contentDetails').select('iframe').remove();
             d3.select('#contentDetails').append('iframe')
                 .attr('height',window.innerHeight-rectHeader.bottom-rectFooter.top-100+"px")
-                .attr('src',"https://tdcw24.generateur.art/s/participants-work/item/"+d['o:id']);
+                .attr('src',domainOmk+"/s/participants-work/item/"+d['o:id']);
             let act = aUrl.params.has('action') ? aUrl.params.get('action') : false;
             switch (act) {
                 case 'diagram':

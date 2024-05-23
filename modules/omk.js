@@ -177,13 +177,25 @@ export class omk {
             postData({'u':url,'m':'POST'}, formatData(data)).then((rs) => {
                 if(cb)cb(rs);
             });
-
         }
 
-        function formatData(data){
-            let fd = {"@type" : "o:Item"},p;
+        this.addMedia = function (data, cb=false){
+            let url = me.api+'media?key_identity='+me.ident+'&key_credential='+me.key;
+            postData({'u':url,'m':'POST'}, formatData(data)).then((rs) => {
+                if(cb)cb(rs);
+            });
+        }
+
+
+        function formatData(data, type="o:Item"){
+            let fd = {"@type" : type},p;
             for (const [k, v] of Object.entries(data)) {
                 switch (k) {
+                    case 'o:item':
+                    case 'o:ingester':
+                    case 'ingest_url':
+                            fd[k]=v;            
+                        break;
                     case 'o:resource_class':
                         p = me.class.filter(prp=>prp['o:term']==v)[0];                        
                         fd[k]={'o:id':p['o:id']};            

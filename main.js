@@ -16,7 +16,9 @@ a.getUser(u=>{
 });
 
 //text generator parameters
-let m = new moteur({'apiUrl':'http://localhost/generateur/apiRead.php','id_dico':169,'id_oeu':72}),
+let urlMoteur = 'https://gestion.generateur.art/apiRead.php',
+    //urlMoteur = 'http://localhost/generateur/apiRead.php',
+    m = new moteur({'apiUrl':'http://localhost/generateur/apiRead.php','id_dico':169,'id_oeu':72}),
     genPrompt = "[prompt_scene]";
 
 //image generator parameter
