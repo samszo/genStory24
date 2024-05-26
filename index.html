@@ -74,7 +74,7 @@
                                     <form autocomplete="off">
                                       <div class="input-group">
                                         <span class="input-group-text" id="url-comfyui"><i class="fa-regular fa-microchip-ai"></i></span>
-                                        <input id="aiUrl" type="text" class="form-control" 
+                                        <input id="aiUrl" type="text" class="form-control" value="127.0.0.1:8188"
                                             size="64" placeholder="" aria-label="" aria-describedby="url-addon">
                                       </div>
                                     </form>
@@ -142,7 +142,6 @@
         import {auth} from './modules/auth.js';
         import {story} from './modules/story.js';
         import {appUrl} from './modules/appUrl.js';
-        import {moteur} from './modules/moteur.js';
         
         //
         let domainOmk = 'https://tdcw24.generateur.art',
@@ -150,8 +149,9 @@
         /*
         let domainOmk = 'http://localhost/omk_genstory_24',
             domainMoteur = 'http://localhost/generateur',
+            //text generator parameters
         */
-            
+            urlMoteur = domainMoteur+'/apiRead.php',            
         a = new auth({
             apiOmk:domainOmk+'/api/',
             ident: 'kfB5UKuTy0H7F3S9bFsi6fc9kNVK6yb9',
@@ -161,11 +161,7 @@
         stories = a.omk.searchItems('resource_class_id=135',setMenuStory,false),
         curStory=false,
         rectFooter = d3.select('footer').node().getBoundingClientRect(),
-        rectHeader = d3.select('header').node().getBoundingClientRect(),
-
-        //text generator parameters
-        urlMoteur = domainMoteur+'/apiRead.php',
-        m = new moteur({'apiUrl':urlMoteur,'id_dico':169,'id_oeu':72,'defaultGen':"[prompt_scene]"})
+        rectHeader = d3.select('header').node().getBoundingClientRect();
         
         //dimensionne la page
         d3.select('#contentMap').style('height',window.innerHeight-rectHeader.bottom-rectFooter.top+"px");
@@ -192,13 +188,13 @@
         function showStory(e,d, id=false){
 
             //image generator parameter
-            const comfyUiServerAddress = document.getElementById('aiUrl').value;// '127.0.0.1:8188';
+            const comfyUiServerAddress = document.getElementById('aiUrl').value;
 
             if(id)d=stories.filter(s=>s['o:id']==id)[0];
             aUrl.change('idStory',d['o:id']);
             console.log(e,d);
             a.omk.loader.hide(true);
-            curStory = new story({'omk':a.omk,'cont':d3.select('#contentMap'),'story':d,'moteur':m
+            curStory = new story({'omk':a.omk,'cont':d3.select('#contentMap'),'story':d,'urlMoteur':urlMoteur
                 ,'comfyUIserver':comfyUiServerAddress});
             d3.select('#contentDetails').select('iframe').remove();
             d3.select('#contentDetails').append('iframe')

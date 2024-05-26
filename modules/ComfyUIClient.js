@@ -41,7 +41,7 @@ export class ComfyUIClient {
         logger.error({ err }, "WebSockets error");
       });
       this.ws.addEventListener("message", (event, isBinary) => {
-        if (isBinary) {
+        if (isBinary || event.data instanceof Blob) {
           console.log("Received binary data");
         } else {
           console.log("Received data: ", event.data);

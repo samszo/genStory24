@@ -1,5 +1,6 @@
 import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
 import { ComfyUIClient } from './ComfyUIClient.js';
+import {moteur} from './moteur.js';
 
 export class story {
     constructor(params={}) {
@@ -8,6 +9,7 @@ export class story {
         this.story = params.story;
         this.cont = params.cont;
         this.urlNoImage = params.urlNoImage ? params.urlNoImage : 'https://samszo.github.io/genStory24/assets/img/papi-GenStory24.png';
+        this.urlMoteur = params.urlMoteur ? params.urlMoteur : false;
         this.moteur = params.moteur ? params.moteur : false;
         this.comfyUIserver = params.comfyUIserver ? params.comfyUIserver : false;
         var maxLooop = 10, grid, items=[], nodes=[], graphCode, graph,
@@ -18,6 +20,7 @@ export class story {
             //me.createChainEvents();
             mermaid.initialize({ startOnLoad: false,theme: 'dark', });
             isValidComfyUi(me.comfyUIserver);           
+
         }
 
         function isValidComfyUi(string) {
@@ -52,9 +55,10 @@ export class story {
             console.log(promptId);
         }
         function closeComfyUI(){
+            console.log('closeComfyUI:'+comfyUIqueue.length)
             if(!comfyUIqueue.length)renderChainEvents();
             else{
-                newComfyClientQueue(comfyUIqueue[0].promptModel);
+                newComfyClientQueue(comfyUIqueue[0].comfyParams);
             };
         }
 
@@ -71,7 +75,7 @@ export class story {
                     event = comfyUIqueue.shift(),
                     data = {
                         "dcterms:title":event.prompt.txt, 
-                        "dcterms:description":JSON.stringify(event.promptModel),
+                        "dcterms:description":JSON.stringify(event.comfyParams),
                         'ingest_url':urlIma,
                         'o:ingester': 'url',
                         "o:item": {'o:id': event["o:id"]} 
@@ -101,6 +105,7 @@ export class story {
             me.cont.selectAll('div').remove();
             comfyUIqueue=[];
             promptStyle="";
+            me.moteur=false;
         }
 
         this.createDiagram = async function(){
@@ -242,12 +247,34 @@ export class story {
             return ec;
         }
 
+        me.getComfyParams = async function(){
+            if(me.story.comfyParams)return;
+            let url = 'assets/data/promptTest.json';
+            me.omk.getMedias(me.story);
+            me.story.medias.forEach(m=>{
+                if(m["@type"].includes("genstory:workflow")){
+                    url=m["o:original_url"];
+                    me.story.comfyParamsPathPrompt=m["genstory:comfyParamsPathPrompt"][0]["@value"];
+                    me.story.comfyParamsPathSeed=m["genstory:comfyParamsPathSeed"][0]["@value"];
+                }
+            })            
+            me.story.comfyParams =  await d3.json(url);
+        }
+
+        me.getGenerateur = function(){
+            if(me.moteur)return;
+            let url = 'assets/data/promptTest.json';
+            me.moteur = new moteur({'apiUrl':me.urlMoteur,
+                'id_dico':me.story["genstory:generateurParamsIdDico"] ? me.story["genstory:generateurParamsIdDico"][0]["@value"] : 169,
+                'id_oeu':me.story["genstory:generateurParamsIdOeu"] ? me.story["genstory:generateurParamsIdOeu"][0]["@value"] : 72,
+                'defaultGen':me.story["genstory:generateurParamsGen"] ? me.story["genstory:generateurParamsGen"][0]["@value"] : "[prompt_scene]"
+            });
+        }
+
         this.createChainEvents = async function(){
             me.omk.loader.show();
             clearScene();
 
-            //get the prompt model
-            promptModel =  await d3.json('assets/data/promptTest.json');
 
             let classDef="classDef image fill:none,stroke:none", classes=""; 
             graph = me.cont
@@ -256,6 +283,15 @@ export class story {
             //graphCode = `flowchart LR
             graphCode = `flowchart TD
                 story${me.story['o:id']}(${me.story['o:title']}) -..-> `;
+
+            var realConsoleLog = console.log;
+            console.log = function () {
+                var message = [].join.call(arguments, " ");
+                graph.text(message);
+                realConsoleLog.apply(console, arguments);
+            };        
+        
+                
             //create initial condition
             if(me.story['genstory:hasInitialCondition']){
 
@@ -269,14 +305,16 @@ export class story {
                     ${ec.class}`;
                     //create prompt
                     if(me.comfyUIserver){
+                        await me.getComfyParams();
+                        me.getGenerateur();
                         num +=2;
                         event.prompt = getPrompt(ec, event, num);
                         graphCode += event.prompt.code;
                         //create prompt image
-                        promptModel['6'].inputs.text = event.prompt.txt;
+                        event.comfyParams = JSON.parse(JSON.stringify(me.story.comfyParams));
+                        event.comfyParams['6'].inputs.text_positive = event.prompt.txt;
                         // Set the seed for our KSampler node
-                        promptModel['3'].inputs.seed = Math.floor(Math.random() * 4294967294)+ 1;
-                        event.promptModel = JSON.parse(JSON.stringify(promptModel));
+                        event.comfyParams['2'].inputs.seed = Math.floor(Math.random() * 4294967294)+ 1;
                         comfyUIqueue.push(event);
                     }
                     //choose next event
@@ -299,7 +337,7 @@ export class story {
 
             //create all images
             if(!comfyUIqueue.length)renderChainEvents();
-            else newComfyClientQueue(comfyUIqueue[0].promptModel);                    
+            else newComfyClientQueue(comfyUIqueue[0].comfyParams);                    
         }
 
         async function renderChainEvents(){
