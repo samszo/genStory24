@@ -214,7 +214,12 @@ export class omk {
                     default:
                         if(!fd[k])fd[k]=[];
                         p = me.props.filter(prp=>prp['o:term']==k)[0];                        
-                        fd[k].push(formatValue(p,v));    
+                        if(Array.isArray(v)){
+                            v.forEach(val=>{
+                                fd[k].push(formatValue(p,val));    
+                            })
+                        }else            
+                            fd[k].push(formatValue(p,v));    
                         break;
                 }
             }                         

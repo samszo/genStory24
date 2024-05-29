@@ -39,3 +39,19 @@ genstory:generateurParamsGen a rdf:Property ;
     rdfs:label "generateur default generator" ;
     rdfs:domain o:Resource ;
     vs:term_status "experimental" .
+
+genstory:storyboard a rdfs:Class ;
+    rdfs:label "storyboard" ;
+    rdfs:domain o:Resource ;
+    vs:term_status "experimental" .
+
+genstory:hasGenParams a rdf:Property ;
+    rdfs:label "has generateur parameters" ;
+    rdfs:domain o:Resource ;
+    vs:term_status "experimental" .
+
+genstory:associatedMedia a rdf:Property ;
+    rdfs:label "associated media" ;
+    rdfs:domain o:Resource ;
+    vs:term_status "experimental" .
+

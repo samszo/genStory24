@@ -64,7 +64,7 @@
   },
   "6": {
     "inputs": {
-      "text_positive": "cartoon of Jerry the mouse and Tom the cat, Jerry runs away from Tom, in a kitchen background\n",
+      "text_positive": "cartoon of Jerry the mouse and Tom the cat, Jerry runs away from Tom, in a kitchen background",
       "text_negative": "bad anatomy",
       "milehigh": "Disney Animation_Animation",
       "log_prompt": false

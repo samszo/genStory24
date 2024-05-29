@@ -14,7 +14,14 @@ export class story {
         this.comfyUIserver = params.comfyUIserver ? params.comfyUIserver : false;
         var maxLooop = 10, grid, items=[], nodes=[], graphCode, graph,
         eventValid=[], eventFail=[],isValid=[],linkValid=[],linkFail=[],links,
-        promptModel, comfyUIConnect=true, comfyUI, comfyUIqueue, sameStyle = true, promptStyle="";
+        comfyUIConnect=true, comfyUI, comfyUIqueue, sameStyle = true, promptStyle="",
+        workflowFile='assets/data/promptTest.json',
+        pathPrompt='',
+        pathSeed='',
+        idDico= 169,
+        idOeu = 72,
+        defaultGen="[prompt_scene]"        
+        ;
 
         this.init = function () {
             //me.createChainEvents();
@@ -78,11 +85,13 @@ export class story {
                         "dcterms:description":JSON.stringify(event.comfyParams),
                         'ingest_url':urlIma,
                         'o:ingester': 'url',
-                        "o:item": {'o:id': event["o:id"]} 
+                        "o:item": {'o:id': event["o:id"]},
                     };
                 //save image to omeka
                 me.omk.addMedia(data,i=>{
                     addGeneretedImage(event, i);
+                    if(!me.story.storyboard)me.story.storyboard=[];
+                    me.story.storyboard.push({'idMedia':i['o:id'],'idItem':event["o:id"]}); 
                     me.omk.loader.hide();
                     comfyUI.disconnect();
                 });    
@@ -106,6 +115,8 @@ export class story {
             comfyUIqueue=[];
             promptStyle="";
             me.moteur=false;
+            me.story.storyboard=[];
+            me.story.idModel = false;
         }
 
         this.createDiagram = async function(){
@@ -247,27 +258,42 @@ export class story {
             return ec;
         }
 
-        me.getComfyParams = async function(){
-            if(me.story.comfyParams)return;
-            let url = 'assets/data/promptTest.json';
+        me.getGenParams = async function(){
+            let genParams;
+            if(me.story.genParams) return me.story.genParams[Math.floor(Math.random()*me.story.genParams.length)];        
             me.omk.getMedias(me.story);
+            me.story.genParams=[];
             me.story.medias.forEach(m=>{
                 if(m["@type"].includes("genstory:workflow")){
-                    url=m["o:original_url"];
-                    me.story.comfyParamsPathPrompt=m["genstory:comfyParamsPathPrompt"][0]["@value"];
-                    me.story.comfyParamsPathSeed=m["genstory:comfyParamsPathSeed"][0]["@value"];
+                    genParams = {'workflow':m["o:original_url"], "idMedia":m["o:id"],
+                        'pathPrompt':m["genstory:comfyParamsPathPrompt"] ? m["genstory:comfyParamsPathPrompt"][0]["@value"]:pathPrompt,
+                        'pathSeed':m["genstory:comfyParamsPathSeed"] ? m["genstory:comfyParamsPathSeed"][0]["@value"] : pathSeed,
+                        'idDico' : m["genstory:generateurParamsIdDico"] ? m["genstory:generateurParamsIdDico"][0]["@value"] : idDico,
+                        'idOeu' : m["genstory:generateurParamsIdOeu"] ? m["genstory:generateurParamsIdOeu"][0]["@value"] : idOeu,
+                        'defaultGen':m["genstory:generateurParamsGen"] ? m["genstory:generateurParamsGen"][0]["@value"] : defaultGen
+                    };
+                    me.story.genParams.push(genParams);
                 }
-            })            
-            me.story.comfyParams =  await d3.json(url);
+            })   
+            if(!me.story.genParams){
+                genParams = {'workflow':wf,
+                    'pathPrompt':pathPrompt,
+                    'pathSeed':pathSeed,
+                    'idDico' : idDico,
+                    'idOeu' : idOeu,
+                    'defaultGen':defaultGen
+                };
+                me.story.genParams.push(genParams);
+            }
+            return me.story.genParams[Math.floor(Math.random()*me.story.genParams.length)]        
         }
 
-        me.getGenerateur = function(){
-            if(me.moteur)return;
-            let url = 'assets/data/promptTest.json';
+        me.getGenerateur = function(genParams){
+            //if(me.moteur)return;
             me.moteur = new moteur({'apiUrl':me.urlMoteur,
-                'id_dico':me.story["genstory:generateurParamsIdDico"] ? me.story["genstory:generateurParamsIdDico"][0]["@value"] : 169,
-                'id_oeu':me.story["genstory:generateurParamsIdOeu"] ? me.story["genstory:generateurParamsIdOeu"][0]["@value"] : 72,
-                'defaultGen':me.story["genstory:generateurParamsGen"] ? me.story["genstory:generateurParamsGen"][0]["@value"] : "[prompt_scene]"
+                'id_dico':genParams.idDico,
+                'id_oeu':genParams.idOeu,
+                'defaultGen':genParams.defaultGen
             });
         }
 
@@ -284,12 +310,14 @@ export class story {
             graphCode = `flowchart TD
                 story${me.story['o:id']}(${me.story['o:title']}) -..-> `;
 
+            /*show console in page    
             var realConsoleLog = console.log;
             console.log = function () {
                 var message = [].join.call(arguments, " ");
                 graph.text(message);
                 realConsoleLog.apply(console, arguments);
-            };        
+            };
+            */        
         
                 
             //create initial condition
@@ -305,16 +333,22 @@ export class story {
                     ${ec.class}`;
                     //create prompt
                     if(me.comfyUIserver){
-                        await me.getComfyParams();
-                        me.getGenerateur();
+                        let genParams = await me.getGenParams();
+                        me.story.idModel = genParams.idMedia;
+                        //get workflow file
+                        if (typeof genParams.workflow === 'string' || genParams.workflow instanceof String)                        
+                            genParams.workflow = await d3.json(genParams.workflow);
+                        me.getGenerateur(genParams);
                         num +=2;
                         event.prompt = getPrompt(ec, event, num);
                         graphCode += event.prompt.code;
-                        //create prompt image
-                        event.comfyParams = JSON.parse(JSON.stringify(me.story.comfyParams));
-                        event.comfyParams['6'].inputs.text_positive = event.prompt.txt;
-                        // Set the seed for our KSampler node
-                        event.comfyParams['2'].inputs.seed = Math.floor(Math.random() * 4294967294)+ 1;
+                        //get the wokflow instance
+                        let comfyParams = JSON.stringify(genParams.workflow);
+                        //change the prompt
+                        comfyParams = comfyParams.replace(genParams.pathPrompt,event.prompt.txt);
+                        //change the seed  for our KSampler node
+                        comfyParams = comfyParams.replace(genParams.pathSeed,Math.floor(Math.random() * 4294967294)+ 1);
+                        event.comfyParams = JSON.parse(comfyParams);
                         comfyUIqueue.push(event);
                     }
                     //choose next event
@@ -347,7 +381,23 @@ export class story {
             await mermaid.run({
                 querySelector: '#mermaidGraph',
               });
+            //save chain
+            let data = {
+                "o:resource_class":"genstory:storyboard", 
+                "dcterms:title":"storyboard base on "+me.story["o:title"], 
+                "dcterms:description":graphCode,
+                "genstory:hasStory":{'rid':me.story["o:id"]},
+                "genstory:hasGenParams":{'rid':me.story["o:id"]}
+            };
+            me.story.storyboard.forEach(sb=>{
+                if(!data["genstory:associatedMedia"])data["genstory:associatedMedia"]=[];
+                data["genstory:associatedMedia"].push({'rid':sb.idMedia});
+            })
+            if(me.story.idModel)data["genstory:hasGenParams"]={'rid':me.story.idModel};
             me.omk.loader.hide(true);
+            me.omk.createItem(data,i=>{
+                console.log("save item : "+i['o:title']);
+            });
         }
 
 
