@@ -55,3 +55,7 @@ genstory:associatedMedia a rdf:Property ;
     rdfs:domain o:Resource ;
     vs:term_status "experimental" .
 
+genstory:comfyParamsPathText a rdf:Property ;
+    rdfs:label "comfyUI path for text in params" ;
+    rdfs:domain o:Resource ;
+    vs:term_status "experimental" .

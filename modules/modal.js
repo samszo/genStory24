@@ -70,3 +70,22 @@ export class modal {
         this.init();
     }
 }
+
+//ajoute la modal pour le paramétrage du prompt
+export let modalPromptParams = `
+    <div class="modal-dialog">
+    <div class="modal-content bg-secondary text-white">
+        <div class="modal-header">
+        <h5 class="modal-title">Prompt params</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <h6>Choose a prompt template<h6>                    
+            <div id="promptTemplate"></div>            
+        </div>                          
+        <div class="modal-footer">
+            <button id='btnAddNewStoryboard' type="button" class="btn btn-danger">Add new storyboard</button>
+        </div>
+    </div>
+    </div>
+`;

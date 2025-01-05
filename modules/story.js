@@ -1,6 +1,8 @@
 import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
 import { ComfyUIClient } from './ComfyUIClient.js';
 import {moteur} from './moteur.js';
+import {modal} from './modal.js';
+import {modalPromptParams} from './modal.js';
 
 export class story {
     constructor(params={}) {
@@ -20,14 +22,17 @@ export class story {
         pathSeed='',
         idDico= 169,
         idOeu = 72,
-        defaultGen="[prompt_scene]"        
+        defaultGen="[prompt_scene]",
+        mPromptParamsBody, mPromptParams        
         ;
 
         this.init = function () {
             //me.createChainEvents();
             mermaid.initialize({ startOnLoad: false,theme: 'dark', });
-            isValidComfyUi(me.comfyUIserver);           
+            isValidComfyUi(me.comfyUIserver);
 
+            //ajoute la modal pour le paramétrage des prompts
+            initPromptParams();            
         }
 
         function isValidComfyUi(string) {
@@ -112,6 +117,8 @@ export class story {
         function clearScene(){
             me.cont.selectAll('pre').remove();
             me.cont.selectAll('div').remove();
+            graph = me.cont
+                .append('pre').attr('id','mermaidGraph').attr("class","mermaid");
             comfyUIqueue=[];
             promptStyle="";
             me.moteur=false;
@@ -124,7 +131,6 @@ export class story {
             eventValid=[], eventFail=[],isValid=[],linkValid=[0],linkFail=[],links=0;
             clearScene();
             let niv = 0;
-            graph = me.cont.append('pre').attr('id','mermaidGraph').attr("class","mermaid");
             graphCode = `
             %%{
                 init: {
@@ -243,7 +249,7 @@ export class story {
                     `;
                 links++;
                 linkValid.push(links);
-    }
+            }
         }
         //
 
@@ -260,12 +266,18 @@ export class story {
 
         me.getGenParams = async function(){
             let genParams;
-            if(me.story.genParams) return me.story.genParams[Math.floor(Math.random()*me.story.genParams.length)];        
+            if(me.story.genParams){
+                let idMedia = document.querySelector('input[name="promptTemplate"]:checked').value,
+                    p = me.story.genParams.filter(gp=>gp.idMedia==idMedia);
+                //return me.story.genParams[Math.floor(Math.random()*me.story.genParams.length)];
+                return p[0];
+            }         
             me.omk.getMedias(me.story);
             me.story.genParams=[];
             me.story.medias.forEach(m=>{
                 if(m["@type"].includes("genstory:workflow")){
-                    genParams = {'workflow':m["o:original_url"], "idMedia":m["o:id"],
+                    genParams = {'workflow':m["o:original_url"], "idMedia":m["o:id"], "title":m["o:title"],
+                        'pathText':m["genstory:comfyParamsPathText"] ? m["genstory:comfyParamsPathText"][0]["@value"]:"",
                         'pathPrompt':m["genstory:comfyParamsPathPrompt"] ? m["genstory:comfyParamsPathPrompt"][0]["@value"]:pathPrompt,
                         'pathSeed':m["genstory:comfyParamsPathSeed"] ? m["genstory:comfyParamsPathSeed"][0]["@value"] : pathSeed,
                         'idDico' : m["genstory:generateurParamsIdDico"] ? m["genstory:generateurParamsIdDico"][0]["@value"] : idDico,
@@ -279,6 +291,7 @@ export class story {
                 genParams = {'workflow':wf,
                     'pathPrompt':pathPrompt,
                     'pathSeed':pathSeed,
+                    'pathText':'',
                     'idDico' : idDico,
                     'idOeu' : idOeu,
                     'defaultGen':defaultGen
@@ -297,15 +310,45 @@ export class story {
             });
         }
 
+        function initPromptParams(){
+            let m=d3.select('#modalPromptParams');
+            if(m.size()==0){
+                m = d3.select('body').append('div')
+                    .attr('id','modalPromptParams').attr('class','modal').attr('tabindex',-1);
+                m.html(modalPromptParams);
+            }            
+            mPromptParamsBody = m.select('.modal-body');
+            mPromptParams = new bootstrap.Modal('#modalPromptParams');
+            m.select('#btnAddNewStoryboard').on('click',me.createChainEvents)        
+            me.getGenParams();
+
+            let promptTemplate =  mPromptParamsBody.select('#promptTemplate');
+            promptTemplate.selectAll('.form-check').remove();
+            let fc = promptTemplate.selectAll('.form-check').data(me.story.genParams).enter()
+                .append('div').attr('class',"form-check");
+            fc.append('input').attr('class',"form-check-input").attr('type',"radio")
+                .attr('name',"promptTemplate")
+                .attr('id',(d,i)=>"promptTemplate"+i)
+                .attr('value',d=>d.idMedia)
+                .attr('checked',(d,i)=>i==0?true:false);
+            fc.append('label').attr('class',"form-check-label")
+                .attr('for',(d,i)=>"promptTemplate"+i)
+                .html(d=>d.title);
+        }
+
+        this.showPromptParams = function (){
+
+            mPromptParams.show();
+
+        }
+
         this.createChainEvents = async function(){
+
+            mPromptParams.hide();
             me.omk.loader.show();
             clearScene();
 
-
             let classDef="classDef image fill:none,stroke:none", classes=""; 
-            graph = me.cont
-                    //.append('div').style('overflow-x','scroll').style('with','100%')
-                    .append('pre').attr('id','mermaidGraph').attr("class","mermaid");
             //graphCode = `flowchart LR
             graphCode = `flowchart TD
                 story${me.story['o:id']}(${me.story['o:title']}) -..-> `;
@@ -348,6 +391,10 @@ export class story {
                         comfyParams = comfyParams.replace(genParams.pathPrompt,event.prompt.txt);
                         //change the seed  for our KSampler node
                         comfyParams = comfyParams.replace(genParams.pathSeed,Math.floor(Math.random() * 4294967294)+ 1);
+                        //change the text
+                        if(genParams.pathText){
+                            comfyParams = comfyParams.replace(genParams.pathText,event['o:title']);
+                        }
                         event.comfyParams = JSON.parse(comfyParams);
                         comfyUIqueue.push(event);
                     }
@@ -372,6 +419,14 @@ export class story {
             //create all images
             if(!comfyUIqueue.length)renderChainEvents();
             else newComfyClientQueue(comfyUIqueue[0].comfyParams);                    
+        }
+
+        this.renderStoryboard = function(sb){
+            clearScene();
+            graph.html(sb);
+            mermaid.run({
+                querySelector: '#mermaidGraph',
+              });
         }
 
         async function renderChainEvents(){
@@ -418,6 +473,10 @@ export class story {
 
             //get the prompt
             let prompt = promptStyle.replace('#label#',e['o:title']);
+            if(promptStyle.indexOf('#place#')>=0){
+                let place = d3.shuffle(me.story['genstory:hasPlace'].slice())[0].display_title;
+                prompt = prompt.replace('#place#',place);
+            }
             console.log(prompt);
             let ec = {'node':oEc.node+'_Prompt','txt':prompt,"idNode":''};
             ec.idNode = "flowchart-"+ec.node+"-"+(num);

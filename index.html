@@ -56,6 +56,16 @@
                                         <i class="fa-light fa-arrow-progress"></i>
                                     </button>
                                 </li>
+                                <li class="nav-item dropdown">
+                                    <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown"
+                                        aria-expanded="false">
+                                        <i class="fa-solid fa-clapperboard"></i>
+                                        <span id="selectStoryboard">Choose storyboard</span>
+                                    </a>
+                                    <ul id="ddStoryboard" class="dropdown-menu">
+                                    </ul>
+                                </li>
+
                                 <li class="nav-item mx-2">
                                     <button id="btnNewStory" type="button" class="btn btn-danger">
                                         <i class="fa-solid fa-shuffle"></i>
@@ -143,14 +153,14 @@
         import {story} from './modules/story.js';
         import {appUrl} from './modules/appUrl.js';
         
-        //
+        /*
         let domainOmk = 'https://tdcw24.generateur.art',
             domainMoteur = 'https://gestion.generateur.art',
-        /*
+        */
         let domainOmk = 'http://localhost/omk_genstory_24',
             domainMoteur = 'http://localhost/generateur',
             //text generator parameters
-        */
+        //
             urlMoteur = domainMoteur+'/apiRead.php',            
         a = new auth({
             apiOmk:domainOmk+'/api/',
@@ -170,7 +180,7 @@
         d3.select('#btnNewStory').on('click',e=>{
             if(curStory){
                 showStory(null,curStory.story);
-                curStory.createChainEvents();
+                curStory.showPromptParams();
             }
         });
         d3.select('#btnShowProgress').on('click',e=>{
@@ -193,6 +203,16 @@
             if(id)d=stories.filter(s=>s['o:id']==id)[0];
             aUrl.change('idStory',d['o:id']);
             console.log(e,d);
+            //affiche la liste des workflows
+            d3.select('#ddStoryboard').selectAll('li').remove();
+            if(!d.storyboards){
+                let q = "property[0][joiner]=and&property[0][property]=242&property[0][type]=res&property[0][text]=1&resource_class_id[]=1332&sort_by=created&sort_order=desc";
+                d.storyboards = a.omk.searchItems(q);
+            }            
+            d3.select('#ddStoryboard').selectAll('li').data(d.storyboards).enter().append('li')
+                .append('a').attr('class',"dropdown-item").text(d=>d["o:modified"]["@value"]+' : '+d['o:title'])
+                .on('click',showStoryboard);
+
             a.omk.loader.hide(true);
             curStory = new story({'omk':a.omk,'cont':d3.select('#contentMap'),'story':d,'urlMoteur':urlMoteur
                 ,'comfyUIserver':comfyUiServerAddress});
@@ -206,11 +226,15 @@
                     if(curStory)curStory.createDiagram();                                                            
                     break;            
                 case 'newStory':
-                    if(curStory)curStory.createChainEvents();                                        
+                    if(curStory)curStory.showPromptParams();                                        
                     break;            
             }
         }
 
+        function showStoryboard(e,d){
+            console.log(d);
+            curStory.renderStoryboard(d["dcterms:description"][0]["@value"]);
+        }
     </script>        
 
 </body>

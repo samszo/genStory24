@@ -5,8 +5,8 @@ import {moteur} from './modules/moteur.js';
 //Omeka parameters
 let a = new auth({'navbar':false,
         mail:'samuel.szoniecky@univ-paris8.fr',
-        //apiOmk:'http://localhost/omk_genstory_24/api/',
-        apiOmk:'https://tdcw24.generateur.art/api/',
+        apiOmk:'http://localhost/omk_genstory_24/api/',
+        //apiOmk:'https://tdcw24.generateur.art/api/',
         ident: 'xMRcEVNwozFp1ZUtu08bvcUpv3AhDJgj',
         key:'xpyKvL1RNloBC6zS8zCysobaNbv83Irb',        
     });
@@ -16,8 +16,8 @@ a.getUser(u=>{
 });
 
 //text generator parameters
-let urlMoteur = 'https://gestion.generateur.art/apiRead.php',
-    //urlMoteur = 'http://localhost/generateur/apiRead.php',
+let //urlMoteur = 'https://gestion.generateur.art/apiRead.php',
+    urlMoteur = 'http://localhost/generateur/apiRead.php',
     m = new moteur({'apiUrl':urlMoteur,'id_dico':169,'id_oeu':72}),
     genPrompt = "[prompt_scene]";
 
