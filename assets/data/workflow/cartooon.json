@@ -2,7 +2,7 @@
   "2": {
     "inputs": {
       "add_noise": "enable",
-      "noise_seed": 4152097310732,
+      "noise_seed": 214670110424757,
       "steps": 50,
       "cfg": 8,
       "sampler_name": "dpmpp_3m_sde",
@@ -124,7 +124,7 @@
   },
   "20": {
     "inputs": {
-      "seed": 1029658727713286,
+      "seed": 1029658727713283,
       "steps": 20,
       "cfg": 7,
       "sampler_name": "uni_pc_bh2",

@@ -23,10 +23,13 @@ export class story {
         idDico= 169,
         idOeu = 72,
         defaultGen="[prompt_scene]",
-        mPromptParamsBody, mPromptParams        
+        mPromptParamsBody, mPromptParams,
+        clientId     
         ;
 
         this.init = function () {
+            clientId = "b3df7411686d4a6784201196f49b2b2f";//Math.random().toString(16).slice(2);//'369c21bf688146b1b07e40b519fd7bdf';
+
             //me.createChainEvents();
             mermaid.initialize({ startOnLoad: false,theme: 'dark', });
             isValidComfyUi(me.comfyUIserver);
@@ -38,7 +41,6 @@ export class story {
         function isValidComfyUi(string) {
             if(!me.comfyUIserver)return false;
             try {
-                let clientId = Math.random().toString(16).slice(2);//'369c21bf688146b1b07e40b519fd7bdf';
                 comfyUI = new ComfyUIClient(me.comfyUIserver, clientId);
                 // Connect to server
                 comfyUI.check(e=>{
@@ -54,7 +56,6 @@ export class story {
 
         async function newComfyClientQueue(prompt){
             // Connect to image generator
-            let clientId = Math.random().toString(16).slice(2);//'369c21bf688146b1b07e40b519fd7bdf';
             comfyUI = new ComfyUIClient(me.comfyUIserver, clientId);
             // Connect to server
             await comfyUI.connect(startComfyUI,progressComfyUI,executedComfyUI,closeComfyUI);                
